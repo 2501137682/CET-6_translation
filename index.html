@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f7f5ef">
+<title>搭配背诵 · 六级翻译</title>
+<style>
+:root{--paper:#f7f5ef;--ink:#202820;--muted:#7c8177;--green:#315e47;--line:#e5e3d9;--white:#fffefb;--soft:#edf2ea;--red:#a34b3d;--gold:#b9883f;--shadow:0 18px 60px #2837280d}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;min-height:100vh}button,select{font:inherit}button{cursor:pointer}
+.shell{max-width:1040px;margin:0 auto;padding:30px 28px 70px}.top{display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{display:flex;align-items:center;gap:12px}.mark{width:40px;height:40px;border-radius:14px;background:var(--green);color:white;display:grid;place-items:center;font-family:Georgia,serif;font-size:21px}.brand-name{font-weight:700;letter-spacing:.02em}.brand-sub{font-size:12px;color:var(--muted)}.top-actions{display:flex;align-items:center;gap:10px}.quiet{border:1px solid var(--line);background:transparent;color:#596257;padding:9px 13px;border-radius:10px;font-size:13px}.quiet:hover{background:white}.hero{padding:46px 0 24px;display:flex;justify-content:space-between;align-items:end;gap:20px}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);font-weight:700}.hero h1{font:500 clamp(30px,5vw,44px)/1.15 Georgia,"Noto Serif SC",serif;letter-spacing:-.03em;margin:8px 0 10px}.hero p{color:var(--muted);margin:0;font-size:14px}.statline{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.stat{min-width:82px;text-align:center;border-left:1px solid var(--line);padding:2px 13px}.stat strong{display:block;font:500 24px Georgia,serif}.stat span{font-size:11px;color:var(--muted)}
+.tabs{display:flex;gap:26px;border-bottom:1px solid var(--line);margin-top:15px}.tab{border:0;background:none;color:#85897f;padding:13px 2px 12px;position:relative;font-size:14px}.tab.active{color:var(--green);font-weight:700}.tab.active:after{content:"";height:2px;position:absolute;bottom:-1px;left:0;right:0;background:var(--green);border-radius:4px}.tab em{font-style:normal;font-size:11px;background:#e9ece5;padding:2px 7px;border-radius:20px;margin-left:5px}
+.work{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:26px;margin-top:24px}.main{min-width:0}.filters{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:12px}.filter-label{font-size:12px;color:var(--muted)}select{border:1px solid var(--line);background:var(--white);border-radius:9px;padding:8px 28px 8px 10px;color:#526050;font-size:12px;max-width:235px}
+.card{background:var(--white);border:1px solid #ebe9df;border-radius:18px;box-shadow:var(--shadow);min-height:404px;display:flex;flex-direction:column;padding:28px 32px 22px;position:relative;overflow:hidden}.card:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#315e47,#a8b895 60%,#e6dcc4)}.card-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#8b9086;font-size:11px}.tag{border:1px solid #e8e8de;border-radius:20px;padding:4px 9px;color:#65715f;max-width:75%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.progress-text{font-variant-numeric:tabular-nums}.prompt-area{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:24px 8px}.prompt-hint{color:#9a9e95;font-size:12px;margin-bottom:14px}.phrase{font:500 clamp(25px,4vw,37px)/1.35 Georgia,"Times New Roman","Noto Serif SC",serif;letter-spacing:-.02em;max-width:100%;overflow-wrap:anywhere}.meaning{margin-top:20px;padding:15px 18px;background:#f5f5ef;border-radius:12px;color:#4e5c4c;font-size:18px;max-width:100%;overflow-wrap:anywhere;animation:appear .22s ease}.meaning small{display:block;font-size:10px;color:#9a9e95;margin-bottom:4px;letter-spacing:.08em}.reveal-btn{border:1px solid #dce3d8;background:#f1f5ef;color:var(--green);border-radius:10px;padding:11px 18px;font-weight:600}.reveal-btn:hover{background:#e8efe5}.rate-row{display:none;gap:9px;justify-content:center;width:100%;max-width:560px;margin:18px auto 0}.rate-row.show{display:flex}.rate{flex:1;border:1px solid var(--line);background:#fff;border-radius:10px;padding:11px 7px;color:#515a50;font-size:13px;transition:.15s}.rate:hover{transform:translateY(-1px)}.rate.forget{color:var(--red)}.rate.good{border-color:#cdd9ca;color:var(--green)}.rate span{display:block;font-size:10px;color:#9ba097;margin-top:3px}.card-foot{display:flex;justify-content:space-between;align-items:center;color:#9a9e95;font-size:11px;padding-top:14px;border-top:1px solid #f0efe9}.side{padding:19px 17px;background:#eeeee6;border-radius:15px;height:max-content}.side h3{font-size:13px;margin:0 0 11px;font-weight:650}.side p{font-size:12px;color:#737a70;margin:0 0 13px}.side-row{display:flex;justify-content:space-between;border-top:1px solid #dddfd5;padding:9px 0;font-size:12px;color:#687065}.side-row b{color:#374337;font-weight:600}.tip{margin-top:15px!important;padding-top:13px;border-top:1px solid #dddfd5;font-size:11px!important;line-height:1.7}.empty{display:none;min-height:404px;align-items:center;justify-content:center;text-align:center;background:var(--white);border:1px solid #ebe9df;border-radius:18px;padding:30px}.empty.show{display:flex}.empty h2{font:500 26px Georgia,serif;margin:10px 0}.empty p{color:var(--muted);font-size:13px;max-width:340px}.empty-icon{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;margin:auto;background:#eaf0e8;color:var(--green);font-size:24px}
+.footer-note{text-align:center;color:#a0a398;font-size:11px;padding:26px 0}.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,15px);opacity:0;pointer-events:none;background:#253b2d;color:white;padding:10px 16px;border-radius:10px;font-size:13px;transition:.2s;z-index:5}.toast.on{opacity:1;transform:translate(-50%,0)}.file-input{display:none}
+@keyframes appear{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:760px){.shell{padding:20px 16px 48px}.hero{align-items:flex-start;flex-direction:column;padding:35px 0 17px}.statline{justify-content:flex-start}.stat:first-child{border-left:0;padding-left:0}.work{grid-template-columns:1fr;gap:14px}.side{order:2}.card{min-height:390px;padding:23px 19px 17px}.filters{align-items:flex-start}.top-actions .quiet{padding:8px 9px;font-size:12px}.tabs{gap:21px}.rate-row{gap:6px}.rate{font-size:12px}.rate span{font-size:9px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="top">
+  <div class="brand"><div class="mark">搭</div><div><div class="brand-name">搭配背诵</div><div class="brand-sub">CET-6 翻译表达 · 离线记忆</div></div></div>
+  <div class="top-actions"><button class="quiet" id="exportBtn">导出进度</button><button class="quiet" id="importBtn">导入进度</button><input class="file-input" id="importFile" type="file" accept="application/json,.json"></div>
+</header>
+<section class="hero">
+  <div><div class="eyebrow">小步积累 · 间隔复习</div><h1>把表达，记得更牢。</h1><p>先主动回忆，再揭晓答案。诚实自评，比猜对一次更重要。</p></div>
+  <div class="statline"><div class="stat"><strong id="statNew">0</strong><span>待学习</span></div><div class="stat"><strong id="statDue">0</strong><span>待复习</span></div><div class="stat"><strong id="statMastered">0</strong><span>已熟悉</span></div></div>
+</section>
+<nav class="tabs"><button class="tab active" data-mode="learn">学习 <em id="learnCount">0</em></button><button class="tab" data-mode="review">复习 <em id="reviewCount">0</em></button></nav>
+<div class="work">
+<main class="main">
+  <div class="filters"><span class="filter-label" id="modeHint">从未学习的词组开始</span><select id="categorySelect" aria-label="筛选词库分类"><option value="">全部词库</option></select></div>
+  <section class="card" id="card">
+    <div class="card-meta"><span class="tag" id="cardCategory">词库</span><span class="progress-text" id="cardCount"></span></div>
+    <div class="prompt-area"><div class="prompt-hint" id="promptHint">看中文，先在心里回忆对应的英文表达</div><div class="phrase" id="phrase"></div><div class="meaning" id="meaning" hidden><small>英文表达</small><span id="meaningText"></span></div><button class="reveal-btn" id="revealBtn">查看英文</button><div class="rate-row" id="rateRow"><button class="rate forget" data-rating="again">没想起来<span>稍后重测</span></button><button class="rate" data-rating="hard">有点模糊<span>尽快再练</span></button><button class="rate good" data-rating="good">记得很稳<span>拉长间隔</span></button></div></div>
+    <div class="card-foot"><span id="cardFoot">不确定时，选“没想起来”更有帮助</span><span>空格翻答案 · 1/2/3 自评</span></div>
+  </section>
+  <section class="empty" id="empty"><div><div class="empty-icon">✓</div><h2 id="emptyTitle">今天的学习完成</h2><p id="emptyText"></p><button class="reveal-btn" id="switchMode">去复习</button></div></section>
+</main>
+<aside class="side"><h3>你的记忆节奏</h3><p>每条搭配按你的回忆情况安排下一次出现。</p><div class="side-row"><span>今天学过</span><b id="todayCount">0 条</b></div><div class="side-row"><span>连续熟悉</span><b id="familiarCount">0 条</b></div><div class="side-row"><span>本轮遗忘</span><b id="lapseCount">0 次</b></div><p class="tip">“记得很稳”会逐步将复习间隔延长至 1、3、7、15、30、60 天。忘记会重置熟悉进度；模糊的表达会较快回来。进度只保存在本机浏览器。</p></aside>
+</div>
+<div class="footer-note">共 <span id="totalCount">0</span> 组 · 词库取自你的原始文件，不含新增词条</div>
+</div>
+<div class="toast" id="toast"></div>
+<script id="source" type="text/plain">一、六级翻译高频万能动词搭配（100组）
+促进发展	promote development
+推动发展	drive development / promote development
+加快发展	accelerate development
+实现发展	achieve development
+持续发展	develop sustainably
+快速发展	develop rapidly
+稳步发展	develop steadily
+全面发展	develop comprehensively
+协调发展	develop in a coordinated manner
+共同发展	develop together
+建设社会	build a society
+建设城市	construct cities / build cities
+建设体系	establish a system
+建立机制	establish a mechanism
+完善制度	improve the system
+完善体系	improve the system
+创造条件	create conditions
+提供保障	provide guarantee
+提供支持	provide support
+提供机会	provide opportunities
+创造价值	create value
+发挥优势	give full play to advantages
+发挥作用	play a role
+发挥潜力	tap potential
+释放潜能	unleash potential
+提高水平	improve the level of
+提升质量	improve quality
+提高效率	improve efficiency
+提升能力	enhance ability
+增强实力	strengthen strength
+增强影响力	enhance influence
+增强竞争力	enhance competitiveness
+增强意识	raise awareness
+提高认识	deepen understanding
+改善生活	improve people's lives
+改善环境	improve the environment
+改善条件	improve conditions
+改善服务	improve services
+优化结构	optimize the structure
+优化资源配置	optimize resource allocation
+转变方式	transform the way
+改变生活方式	change lifestyles
+更新观念	update ideas
+开拓市场	explore markets
+扩大影响	expand influence
+制定政策	formulate policies
+出台政策	introduce policies
+实施政策	implement policies
+执行政策	carry out policies
+采取措施	take measures
+采取行动	take action
+采取方法	adopt methods
+加强管理	strengthen management
+加强监督	strengthen supervision
+加强合作	strengthen cooperation
+加强交流	strengthen communication
+促进合作	promote cooperation
+深化合作	deepen cooperation
+扩大开放	expand opening-up
+应对挑战	address challenges
+克服困难	overcome difficulties
+解决问题	solve problems
+缓解压力	relieve pressure
+避免风险	avoid risks
+降低成本	reduce costs
+传承文化	inherit culture
+弘扬文化	promote culture
+传播文化	spread culture
+保护文化遗产	preserve cultural heritage
+展示文化魅力	display cultural charm
+促进文化交流	promote cultural exchange
+丰富文化内涵	enrich cultural connotations
+培养人才	cultivate talents
+培养能力	develop abilities
+培养兴趣	cultivate interests
+获取知识	acquire knowledge
+掌握技能	master skills
+开阔视野	broaden horizons
+激发创造力	stimulate creativity
+激发兴趣	arouse interest
+推动创新	promote innovation
+鼓励创新	encourage innovation
+研发技术	develop technologies
+应用技术	apply technologies
+利用资源	utilize resources
+节约资源	conserve resources
+保护环境	protect the environment
+减少污染	reduce pollution
+降低排放	reduce emissions
+促进绿色发展	promote green development
+实现可持续发展	achieve sustainable development
+适应变化	adapt to changes
+顺应趋势	follow trends
+引领潮流	lead trends
+克服障碍	overcome obstacles
+突破限制	break limitations
+达到目标	achieve goals
+满足需求	meet needs
+带来变化	bring changes
+产生影响	have an impact
+
+
+二、六级翻译万能句型搭配（100组）
+随着……的发展	With the development of...
+随着……的增加	With the increase of...
+随着时代的发展	With the development of the times
+随着科技进步	With technological progress
+在过去几十年里	In the past decades
+近年来	In recent years
+在现代社会中	In modern society
+在当今世界	In today's world
+在经济全球化背景下	In the context of economic globalization
+在信息时代	In the information age
+由于……的发展	Due to the development of...
+得益于……	Thanks to...
+受……影响	Be influenced by...
+源于……	Originate from...
+起源于……	Date back to...
+追溯到……	Can be traced back to...
+作为……的重要组成部分	As an important part of...
+作为中国传统文化的重要组成部分	As an important part of traditional Chinese culture
+众所周知	It is well known that...
+不可否认的是	It is undeniable that...
+发挥重要作用	play an important role
+发挥关键作用	play a key role
+发挥积极作用	play a positive role
+对……具有重要意义	be of great significance to
+对……至关重要	be crucial to
+对……产生影响	have an impact on
+对……产生积极影响	have a positive impact on
+有助于……	contribute to
+有利于……	be beneficial to
+促进……发展	promote the development of
+推动……进步	advance the progress of
+帮助人们……	help people to
+使……成为可能	make it possible for
+提供机会	provide opportunities
+创造条件	create conditions
+带来巨大变化	bring great changes
+改变人们生活	change people's lives
+丰富人们生活	enrich people's lives
+提高生活质量	improve quality of life
+增强幸福感	enhance happiness
+被认为是	be regarded as
+被称为	be known as
+被誉为	be praised as
+被广泛认可	be widely recognized
+被广泛接受	be widely accepted
+被广泛使用	be widely used
+被广泛传播	be widely spread
+被认为具有价值	be considered valuable
+被视为重要方式	be viewed as an important way
+被用于	be used for
+被应用于	be applied to
+被引入	be introduced
+被推广	be promoted
+被保护	be protected
+被保存	be preserved
+被传承	be inherited
+被列入	be included in
+被列为	be listed as
+被称作	be referred to as
+被证明	be proved
+旨在	aim to
+致力于	be committed to
+努力实现	strive to achieve
+努力促进	strive to promote
+采取措施促进	take measures to promote
+采取行动保护	take action to protect
+制定计划	make plans
+制定目标	set goals
+实现目标	achieve goals
+达到标准	meet standards
+满足需求	meet demands
+解决问题	solve problems
+应对挑战	deal with challenges
+克服困难	overcome difficulties
+减少差距	narrow the gap
+缩小差异	reduce differences
+避免风险	avoid risks
+防止污染	prevent pollution
+保护环境	protect the environment
+促进合作	promote cooperation
+越来越多	an increasing number of
+越来越重要	become increasingly important
+越来越受到关注	receive increasing attention
+呈现增长趋势	show a growing trend
+保持快速增长	maintain rapid growth
+得到快速发展	develop rapidly
+发生巨大变化	undergo great changes
+发生深刻变化	undergo profound changes
+从……转变为……	transform from...into...
+从传统方式转向现代方式	shift from traditional methods to modern ones
+逐渐形成	gradually form
+逐渐发展	gradually develop
+不断提高	continuously improve
+不断增加	continuously increase
+不断完善	continuously improve
+广泛应用	be widely applied
+深入人心	become deeply rooted
+受到越来越多关注	attract increasing attention
+在全球范围内	on a global scale
+从长远来看	in the long run
+
+主题：
+一、中国传统文化类
+传统文化	traditional culture
+中华优秀传统文化	excellent traditional Chinese culture
+文化遗产	cultural heritage
+非物质文化遗产	intangible cultural heritage
+世界文化遗产	world cultural heritage
+文化传承	cultural inheritance
+文化传播	cultural dissemination
+文化交流	cultural exchange
+文化融合	cultural integration
+文化多样性	cultural diversity
+文化自信	cultural confidence
+弘扬传统文化	promote traditional culture
+保护文化遗产	preserve cultural heritage
+传承文化传统	inherit cultural traditions
+丰富文化内涵	enrich cultural connotations
+促进文明交流	promote exchanges among civilizations
+增强文化影响力	enhance cultural influence
+展现文化魅力	display cultural charm
+具有悠久历史	have a long history
+源远流长	have a long history
+儒家思想	Confucianism
+道家思想	Taoism
+佛教文化	Buddhist culture
+中国哲学	Chinese philosophy
+和谐社会	harmonious society
+天人合一	harmony between man and nature
+仁爱思想	benevolent ideas
+传统美德	traditional virtues
+尊老爱幼	respect the elderly and care for the young
+勤劳勇敢	hardworking and brave
+诚实守信	honesty and integrity
+家庭观念	family values
+社会责任感	sense of social responsibility
+民族精神	national spirit
+爱国主义精神	patriotism
+中国书法	Chinese calligraphy
+中国画	Chinese painting
+京剧	Peking Opera
+戏曲艺术	opera art
+民间艺术	folk art
+民间音乐	folk music
+传统技艺	traditional craftsmanship
+手工艺品	handicrafts
+剪纸艺术	paper-cutting art
+陶瓷艺术	ceramic art
+茶文化	tea culture
+茶道	tea ceremony
+武术	martial arts
+功夫	kung fu
+古典文学	classical literature
+
+
+二、中国历史与节日类
+历史悠久	have a long history
+历史文化名城	historic and cultural city
+古代文明	ancient civilization
+中华文明	Chinese civilization
+朝代	dynasty
+唐朝	the Tang Dynasty
+宋朝	the Song Dynasty
+明朝	the Ming Dynasty
+清朝	the Qing Dynasty
+丝绸之路	the Silk Road
+一带一路	the Belt and Road Initiative
+历史遗迹	historical sites
+名胜古迹	places of historical interest
+古建筑	ancient architecture
+传统建筑	traditional architecture
+春节	Spring Festival
+元宵节	Lantern Festival
+清明节	Tomb-Sweeping Day
+端午节	Dragon Boat Festival
+中秋节	Mid-Autumn Festival
+重阳节	Double Ninth Festival
+节日习俗	festival customs
+庆祝节日	celebrate festivals
+家庭团聚	family reunion
+吃团圆饭	have a family reunion dinner
+赏月	admire the moon
+赛龙舟	hold dragon boat races
+包粽子	make zongzi
+放烟花	set off fireworks
+
+
+三、社会发展与国家建设类
+经济发展	economic development
+快速发展	rapid development
+高质量发展	high-quality development
+经济增长	economic growth
+市场经济	market economy
+社会主义市场经济	socialist market economy
+经济全球化	economic globalization
+对外开放	opening-up policy
+改革开放	reform and opening-up
+国际贸易	international trade
+经济合作	economic cooperation
+促进经济发展	promote economic development
+提高生活水平	improve living standards
+改善人民生活	improve people's lives
+城市化	urbanization
+城镇化进程	process of urbanization
+城市建设	urban construction
+基础设施建设	infrastructure construction
+公共服务	public services
+智慧城市	smart city
+现代化城市	modern city
+城乡发展	urban and rural development
+乡村振兴	rural revitalization
+美丽乡村	beautiful countryside
+新农村建设	construction of new countryside
+民生问题	people's livelihood issues
+社会保障	social security
+医疗保障	medical security
+养老服务	elderly care services
+就业机会	employment opportunities
+解决就业问题	solve employment problems
+提高幸福感	improve happiness
+共同富裕	common prosperity
+缩小贫富差距	narrow the wealth gap
+
+
+四、教育类
+教育事业	education cause
+教育发展	educational development
+教育改革	educational reform
+教育公平	educational equality
+素质教育	quality education
+义务教育	compulsory education
+高等教育	higher education
+职业教育	vocational education
+在线教育	online education
+远程教育	distance education
+教育资源	educational resources
+教学质量	teaching quality
+培养人才	cultivate talents
+培养创新能力	cultivate innovation ability
+提高综合素质	improve overall quality
+开阔视野	broaden one's horizons
+获取知识	acquire knowledge
+掌握技能	master skills
+终身学习	lifelong learning
+促进个人发展	promote personal development
+
+
+五、科技创新与数字化
+科技创新	technological innovation
+科学技术	science and technology
+高新技术	high technology
+人工智能	artificial intelligence
+大数据	big data
+云计算	cloud computing
+信息技术	information technology
+数字经济	digital economy
+数字化转型	digital transformation
+智能设备	intelligent devices
+互联网技术	Internet technology
+移动支付	mobile payment
+电子商务	e-commerce
+网络平台	online platform
+信息时代	information age
+科技进步	technological progress
+推动创新	promote innovation
+提高效率	improve efficiency
+改变生活方式	change lifestyles
+发挥重要作用	play an important role
+
+
+六、环境保护类
+环境保护	environmental protection
+生态文明	ecological civilization
+可持续发展	sustainable development
+绿色发展	green development
+低碳生活	low-carbon lifestyle
+节约能源	save energy
+减少污染	reduce pollution
+环境污染	environmental pollution
+空气污染	air pollution
+水污染	water pollution
+垃圾分类	garbage classification
+回收利用	recycling
+保护生态环境	protect ecological environment
+生态系统	ecosystem
+生物多样性	biodiversity</script>
+<script>
+(() => {
+'use strict';
+const KEY='cet6PhraseMemory.v1';
+const source=document.getElementById('source').textContent;
+const entries=[]; let category='通用搭配';
+for(const line of source.split(/\r?\n/)){
+  const trimmed=line.trim();
+  if(!trimmed) continue;
+  if(trimmed==='主题：'){category='主题词汇';continue}
+  if(/^[一二三四五六七八九十]+、/.test(trimmed)){category=trimmed;continue}
+  const parts=trimmed.split(/\t+/);
+  if(parts.length>=2 && parts[0].trim() && parts.slice(1).join(' ').trim()){
+    entries.push({cn:parts[0].trim(),en:parts.slice(1).join(' ').trim(),category});
+  }
+}
+if(entries.length!==368) throw new Error('词库数量校验失败：预期 368，实际 '+entries.length);
+let state=readState(), mode='learn', current=null, revealed=false, sessionSeen=new Set();
+const $=id=>document.getElementById(id);
+const now=()=>Date.now();
+function readState(){try{return JSON.parse(localStorage.getItem(KEY))||{cards:{},today:'',studied:0,lapses:0}}catch{return{cards:{},today:'',studied:0,lapses:0}}}
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function cardState(i){return state.cards[i]||{stage:0,due:0,seen:0,lapses:0}}
+function isNew(i){return !state.cards[i]}
+function isDue(i){const s=state.cards[i];return !!s&&s.due<=now()}
+function categories(){return [...new Set(entries.map(x=>x.category))]}
+function allowed(i){const filter=$('categorySelect').value;return !filter||entries[i].category===filter}
+function stats(){
+ const fresh=entries.reduce((a,_,i)=>a+(isNew(i)?1:0),0);
+ const due=entries.reduce((a,_,i)=>a+(!isNew(i)&&isDue(i)?1:0),0);
+ const mastered=Object.values(state.cards).filter(x=>x.mastered).length;
+ $('statNew').textContent=fresh;$('statDue').textContent=due;$('statMastered').textContent=mastered;
+ $('learnCount').textContent=entries.reduce((a,_,i)=>a+(isNew(i)&&allowed(i)?1:0),0);
+ $('reviewCount').textContent=entries.reduce((a,_,i)=>a+(!isNew(i)&&isDue(i)&&allowed(i)?1:0),0);
+ $('totalCount').textContent=entries.length;
+ $('todayCount').textContent=(state.today===new Date().toLocaleDateString('sv-SE')?state.studied:0)+' 条';
+ $('lapseCount').textContent=state.today===new Date().toLocaleDateString('sv-SE')?state.lapses:0;
+ $('familiarCount').textContent=Object.values(state.cards).filter(x=>x.stage>=3).length+' 条';
+}
+function setupCategories(){for(const c of categories()){const o=document.createElement('option');o.value=c;o.textContent=c.replace(/（.*?）/g,'');$('categorySelect').append(o)}}
+function selectNext(){
+ const candidates=[];
+ entries.forEach((e,i)=>{if(!allowed(i))return;const s=state.cards[i];
+   if(mode==='learn'&&isNew(i)) candidates.push(i);
+   else if(mode==='learn'&&s&&isDue(i)&&!sessionSeen.has(i)) candidates.push(i);
+   else if(mode==='review'&&s&&isDue(i)) candidates.push(i);
+ });
+ if(!candidates.length){showEmpty();return}
+ if(!$('categorySelect').value){
+   let pool=candidates;
+   if(pool.length>1&&pool.includes(state.lastPromptIndex))pool=pool.filter(i=>i!==state.lastPromptIndex);
+   current=pool[Math.floor(Math.random()*pool.length)];
+ }else current=candidates[0];
+ sessionSeen.add(current);revealed=false;state.lastPromptIndex=current;save();renderCard();
+}
+function showEmpty(){
+ $('card').style.display='none';$('empty').classList.add('show');
+ const newCount=entries.some((_,i)=>isNew(i)&&allowed(i));
+ const dueCount=entries.some((_,i)=>!isNew(i)&&isDue(i)&&allowed(i));
+ if(mode==='learn'&&!newCount&&dueCount){$('emptyTitle').textContent='新词学完了';$('emptyText').textContent='已经学过的表达中有待复习内容，趁热再回忆一轮吧。';$('switchMode').hidden=false;$('switchMode').textContent='开始复习'}
+ else if(mode==='learn'&&!newCount){$('emptyTitle').textContent='本分类学完了';$('emptyText').textContent='当前分类没有待学新词。稍后到复习页，继续巩固到熟悉。';$('switchMode').hidden=false;$('switchMode').textContent='去复习'}
+ else if(mode==='review'&&!dueCount){$('emptyTitle').textContent='复习到这里';$('emptyText').textContent='目前没有到期的表达。新的复习会按记忆间隔自动安排。';$('switchMode').hidden=false;$('switchMode').textContent='继续学习'}
+ else {$('emptyTitle').textContent='这组学完啦';$('emptyText').textContent='当前没有待练内容，可以切换分类或稍后再来。';$('switchMode').hidden=false;$('switchMode').textContent='切换到'+(mode==='learn'?'复习':'学习')}
+ $('modeHint').textContent=mode==='learn'?'从未学习的词组开始':'到期表达优先，遗忘的更快重测';
+}
+function renderCard(){
+ $('card').style.display='flex';$('empty').classList.remove('show');
+ const e=entries[current], s=cardState(current);
+ $('cardCategory').textContent=e.category.replace(/^[一二三四五六七八九十]+、/,'').replace(/（.*?）/g,'');
+ $('cardCount').textContent=(mode==='learn'?'学习':'复习')+' · '+(sessionSeen.size);
+ $('phrase').textContent=e.cn;$('meaningText').textContent=e.en;
+ $('meaning').hidden=!revealed;$('revealBtn').hidden=revealed;$('rateRow').classList.toggle('show',revealed);
+ $('promptHint').textContent=mode==='learn'?'先读中文，主动回忆对应的英文表达':'主动回忆英文表达；不要急着揭晓';
+ $('cardFoot').textContent=s.stage>=3?'这条已有连续熟悉记录，继续诚实判断':'不确定时，选“没想起来”更有帮助';
+ $('modeHint').textContent=mode==='learn'?'先回忆中文释义，再查看答案':'按记忆状态安排的到期表达';
+}
+function switchMode(next){mode=next;sessionSeen.clear();document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.mode===mode));stats();selectNext()}
+function record(rating){
+ if(current===null||!revealed)return;
+ const s=cardState(current), t=now(), day=24*60*60*1000;
+ if(state.today!==new Date().toLocaleDateString('sv-SE')){state.today=new Date().toLocaleDateString('sv-SE');state.studied=0;state.lapses=0}
+ s.seen=(s.seen||0)+1;state.studied++;
+ if(rating==='again'){s.stage=0;s.lapses=(s.lapses||0)+1;s.due=t+60*1000;state.lapses++}
+ else if(rating==='hard'){s.stage=Math.max(0,(s.stage||0)-1);s.due=t+10*60*1000}
+ else {s.stage=Math.min((s.stage||0)+1,6);const intervals=[1,3,7,15,30,60];s.due=t+intervals[Math.max(0,s.stage-1)]*day;s.mastered=s.stage>=6}
+ s.last=t;state.cards[current]=s;save();stats();current=null;selectNext()
+}
+function exportProgress(){const blob=new Blob([JSON.stringify({format:'cet6PhraseMemory',version:1,sourceCount:entries.length,state},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='六级搭配背诵-进度备份.json';a.click();URL.revokeObjectURL(a.href);toast('进度备份已导出')}
+function importProgress(file){const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(data.format!=='cet6PhraseMemory'||!data.state?.cards)throw new Error();state=data.state;save();sessionSeen.clear();stats();selectNext();toast('进度已导入')}catch{toast('文件格式不正确，未导入')}};reader.readAsText(file)}
+let toastTimer;function toast(msg){const el=$('toast');el.textContent=msg;el.classList.add('on');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('on'),2100)}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchMode(t.dataset.mode)));
+$('revealBtn').addEventListener('click',()=>{if(current===null)return;revealed=true;renderCard()});
+document.querySelectorAll('.rate').forEach(b=>b.addEventListener('click',()=>record(b.dataset.rating)));
+$('categorySelect').addEventListener('change',()=>{sessionSeen.clear();stats();selectNext()});
+$('switchMode').addEventListener('click',()=>switchMode(mode==='learn'?'review':'learn'));
+$('exportBtn').addEventListener('click',exportProgress);
+$('importBtn').addEventListener('click',()=>$('importFile').click());
+$('importFile').addEventListener('change',e=>{if(e.target.files[0])importProgress(e.target.files[0]);e.target.value=''});
+document.addEventListener('keydown',e=>{if(e.target.matches('select,input'))return;if(e.code==='Space'){e.preventDefault();if(!revealed)$('revealBtn').click()}else if(revealed&&['1','2','3'].includes(e.key)){document.querySelector('[data-rating="'+({1:'again',2:'hard',3:'good'}[e.key])+'"]').click()}});
+setupCategories();stats();switchMode('learn');
+})();
+</script>
+</body>
+</html>

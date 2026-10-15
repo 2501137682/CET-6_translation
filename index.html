@@ -27,7 +27,7 @@
   <div><div class="eyebrow">小步积累 · 间隔复习</div><h1>把表达，记得更牢。</h1><p>先主动回忆，再揭晓答案。诚实自评，比猜对一次更重要。</p></div>
   <div class="statline"><div class="stat"><strong id="statNew">0</strong><span>待学习</span></div><div class="stat"><strong id="statDue">0</strong><span>待复习</span></div><div class="stat"><strong id="statMastered">0</strong><span>已熟悉</span></div></div>
 </section>
-<nav class="tabs"><button class="tab active" data-mode="learn">学习 <em id="learnCount">0</em></button><button class="tab" data-mode="review">复习 <em id="reviewCount">0</em></button></nav>
+<nav class="tabs"><button class="tab active" data-mode="learn">学习 <em id="learnCount">0</em></button><button class="tab" data-mode="review">待复习 <em id="reviewCount">0</em></button><button class="tab" data-mode="mastered">已熟悉 <em id="masteredCount">0</em></button></nav>
 <div class="work">
 <main class="main">
   <div class="filters"><span class="filter-label" id="modeHint">从未学习的词组开始</span><select id="categorySelect" aria-label="筛选词库分类"><option value="">全部词库</option></select></div>
@@ -38,9 +38,9 @@
   </section>
   <section class="empty" id="empty"><div><div class="empty-icon">✓</div><h2 id="emptyTitle">今天的学习完成</h2><p id="emptyText"></p><button class="reveal-btn" id="switchMode">去复习</button></div></section>
 </main>
-<aside class="side"><h3>你的记忆节奏</h3><p>每条搭配按你的回忆情况安排下一次出现。</p><div class="side-row"><span>今天学过</span><b id="todayCount">0 条</b></div><div class="side-row"><span>连续熟悉</span><b id="familiarCount">0 条</b></div><div class="side-row"><span>本轮遗忘</span><b id="lapseCount">0 次</b></div><p class="tip">“记得很稳”会逐步将复习间隔延长至 1、3、7、15、30、60 天。忘记会重置熟悉进度；模糊的表达会较快回来。进度只保存在本机浏览器。</p></aside>
+<aside class="side"><h3>你的记忆节奏</h3><p>每组约 20 条，组内随机重复；每条连续 4 次选“记得很稳”，整组才会进入下一阶段。</p><div class="side-row"><span>今天学过</span><b id="todayCount">0 条</b></div><div class="side-row"><span>本组进度</span><b id="familiarCount">0 / 20</b></div><div class="side-row"><span>本轮遗忘</span><b id="lapseCount">0 次</b></div><p class="tip">学习组完成后进入待复习；待复习组完成后进入已熟悉。已熟悉内容不分组、持续随机抽查；如果答得不稳，会回到原复习组。</p></aside>
 </div>
-<div class="footer-note">共 <span id="totalCount">0</span> 组 · 词库取自你的原始文件，不含新增词条</div>
+  <div class="footer-note">共 <span id="totalCount">0</span> 条 · 词库取自你的原始文件，不含新增词条</div>
 </div>
 <div class="toast" id="toast"></div>
 <script id="source" type="text/plain">一、六级翻译高频万能动词搭配（100组）
@@ -450,84 +450,105 @@ for(const line of source.split(/\r?\n/)){
   }
 }
 if(entries.length!==368) throw new Error('词库数量校验失败：预期 368，实际 '+entries.length);
-let state=readState(), mode='learn', current=null, revealed=false, sessionSeen=new Set();
+ const GROUP_SIZE=20, QUALIFY_GOODS=4;
+ let state=readState(), mode='learn', current=null, revealed=false, sessionSeen=new Set(), sessionCount=0;
 const $=id=>document.getElementById(id);
 const now=()=>Date.now();
-function readState(){try{return JSON.parse(localStorage.getItem(KEY))||{cards:{},today:'',studied:0,lapses:0}}catch{return{cards:{},today:'',studied:0,lapses:0}}}
+ function shuffle(list){const a=[...list];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+ function newGroups(){const ids=shuffle(entries.map((_,i)=>i));const groups=[];for(let i=0;i<ids.length;i+=GROUP_SIZE)groups.push({id:groups.length+1,ids:ids.slice(i,i+GROUP_SIZE)});return groups}
+ function readState(){try{return JSON.parse(localStorage.getItem(KEY))||{cards:{},today:'',studied:0,lapses:0}}catch{return{cards:{},today:'',studied:0,lapses:0}}}
+ function prepareState(raw){
+   const s=raw&&typeof raw==='object'?raw:{cards:{},today:'',studied:0,lapses:0};
+   if(!s.cards||typeof s.cards!=='object')s.cards={};
+   if(!Array.isArray(s.groups)||!s.groups.length||s.groups.reduce((n,g)=>n+(Array.isArray(g.ids)?g.ids.length:0),0)!==entries.length)s.groups=newGroups();
+   s.groups.forEach((g,gi)=>{g.id=gi+1;g.ids=g.ids.filter(i=>Number.isInteger(i)&&i>=0&&i<entries.length);});
+   const assigned=new Set(s.groups.flatMap(g=>g.ids));
+   const missing=entries.map((_,i)=>i).filter(i=>!assigned.has(i));
+   if(missing.length)s.groups.push({id:s.groups.length+1,ids:missing});
+   s.groups.forEach(g=>g.ids.forEach(i=>{
+     const c=s.cards[i]||{};
+     if(!c.phase)c.phase=c.mastered||c.stage>=6?'mastered':c.stage>0?'review':'learn';
+     if(!['learn','review','mastered'].includes(c.phase))c.phase='learn';
+     c.goodStreak=Number.isFinite(c.goodStreak)?Math.max(0,Math.min(QUALIFY_GOODS,c.goodStreak)):0;
+     c.seen=c.seen||0;c.lapses=c.lapses||0;c.group=g.id;s.cards[i]=c;
+   }));
+   s.lastPromptIndex=Number.isInteger(s.lastPromptIndex)?s.lastPromptIndex:null;
+   return s;
+ }
+ state=prepareState(state);save();
 function save(){localStorage.setItem(KEY,JSON.stringify(state))}
-function cardState(i){return state.cards[i]||{stage:0,due:0,seen:0,lapses:0}}
-function isNew(i){return !state.cards[i]}
-function isDue(i){const s=state.cards[i];return !!s&&s.due<=now()}
+ function cardState(i){return state.cards[i]||{phase:'learn',goodStreak:0,seen:0,lapses:0}}
+ function groupOf(i){return state.groups.find(g=>g.ids.includes(i))}
 function categories(){return [...new Set(entries.map(x=>x.category))]}
 function allowed(i){const filter=$('categorySelect').value;return !filter||entries[i].category===filter}
+ function cardsInMode(g,phase){return g.ids.filter(i=>allowed(i)&&cardState(i).phase===phase)}
+ function readyToPromote(g,phase){const ids=g.ids.filter(i=>cardState(i).phase===phase);return ids.length>0&&ids.every(i=>cardState(i).goodStreak>=QUALIFY_GOODS)}
+ function promoteReadyGroups(phase){
+   const next=phase==='learn'?'review':phase==='review'?'mastered':null;if(!next)return;
+   state.groups.forEach(g=>{if(!readyToPromote(g,phase))return;g.ids.filter(i=>cardState(i).phase===phase).forEach(i=>{const c=cardState(i);c.phase=next;c.goodStreak=0;c.due=0})});
+ }
 function stats(){
- const fresh=entries.reduce((a,_,i)=>a+(isNew(i)?1:0),0);
- const due=entries.reduce((a,_,i)=>a+(!isNew(i)&&isDue(i)?1:0),0);
- const mastered=Object.values(state.cards).filter(x=>x.mastered).length;
+   const fresh=entries.reduce((a,_,i)=>a+(cardState(i).phase==='learn'?1:0),0);
+   const due=entries.reduce((a,_,i)=>a+(cardState(i).phase==='review'?1:0),0);
+   const mastered=entries.reduce((a,_,i)=>a+(cardState(i).phase==='mastered'?1:0),0);
  $('statNew').textContent=fresh;$('statDue').textContent=due;$('statMastered').textContent=mastered;
- $('learnCount').textContent=entries.reduce((a,_,i)=>a+(isNew(i)&&allowed(i)?1:0),0);
- $('reviewCount').textContent=entries.reduce((a,_,i)=>a+(!isNew(i)&&isDue(i)&&allowed(i)?1:0),0);
+   $('learnCount').textContent=entries.reduce((a,_,i)=>a+(cardState(i).phase==='learn'&&allowed(i)?1:0),0);
+   $('reviewCount').textContent=entries.reduce((a,_,i)=>a+(cardState(i).phase==='review'&&allowed(i)?1:0),0);
+   $('masteredCount').textContent=entries.reduce((a,_,i)=>a+(cardState(i).phase==='mastered'&&allowed(i)?1:0),0);
  $('totalCount').textContent=entries.length;
  $('todayCount').textContent=(state.today===new Date().toLocaleDateString('sv-SE')?state.studied:0)+' 条';
  $('lapseCount').textContent=state.today===new Date().toLocaleDateString('sv-SE')?state.lapses:0;
- $('familiarCount').textContent=Object.values(state.cards).filter(x=>x.stage>=3).length+' 条';
+   const g=current===null?state.groups.find(x=>cardsInMode(x,mode).length):groupOf(current);
+   const ids=g?cardsInMode(g,mode):[];const done=ids.filter(i=>cardState(i).goodStreak>=QUALIFY_GOODS).length;
+   $('familiarCount').textContent=mode==='mastered'?mastered+' 条':done+' / '+ids.length;
 }
 function setupCategories(){for(const c of categories()){const o=document.createElement('option');o.value=c;o.textContent=c.replace(/（.*?）/g,'');$('categorySelect').append(o)}}
 function selectNext(){
- const candidates=[];
- entries.forEach((e,i)=>{if(!allowed(i))return;const s=state.cards[i];
-   if(mode==='learn'&&isNew(i)) candidates.push(i);
-   else if(mode==='learn'&&s&&isDue(i)&&!sessionSeen.has(i)) candidates.push(i);
-   else if(mode==='review'&&s&&isDue(i)) candidates.push(i);
- });
- if(!candidates.length){showEmpty();return}
- if(!$('categorySelect').value){
+   promoteReadyGroups(mode);
+   let candidates=[], activeGroup=null;
+   if(mode==='mastered')candidates=entries.map((_,i)=>i).filter(i=>allowed(i)&&cardState(i).phase==='mastered');
+   else for(const g of state.groups){const pool=cardsInMode(g,mode).filter(i=>cardState(i).goodStreak<QUALIFY_GOODS);if(pool.length){candidates=pool;activeGroup=g;break}}
+   if(!candidates.length){save();showEmpty();return}
    let pool=candidates;
    if(pool.length>1&&pool.includes(state.lastPromptIndex))pool=pool.filter(i=>i!==state.lastPromptIndex);
    current=pool[Math.floor(Math.random()*pool.length)];
- }else current=candidates[0];
- sessionSeen.add(current);revealed=false;state.lastPromptIndex=current;save();renderCard();
+   sessionSeen.add(current);sessionCount++;revealed=false;state.lastPromptIndex=current;save();renderCard();
 }
 function showEmpty(){
  $('card').style.display='none';$('empty').classList.add('show');
- const newCount=entries.some((_,i)=>isNew(i)&&allowed(i));
- const dueCount=entries.some((_,i)=>!isNew(i)&&isDue(i)&&allowed(i));
- if(mode==='learn'&&!newCount&&dueCount){$('emptyTitle').textContent='新词学完了';$('emptyText').textContent='已经学过的表达中有待复习内容，趁热再回忆一轮吧。';$('switchMode').hidden=false;$('switchMode').textContent='开始复习'}
- else if(mode==='learn'&&!newCount){$('emptyTitle').textContent='本分类学完了';$('emptyText').textContent='当前分类没有待学新词。稍后到复习页，继续巩固到熟悉。';$('switchMode').hidden=false;$('switchMode').textContent='去复习'}
- else if(mode==='review'&&!dueCount){$('emptyTitle').textContent='复习到这里';$('emptyText').textContent='目前没有到期的表达。新的复习会按记忆间隔自动安排。';$('switchMode').hidden=false;$('switchMode').textContent='继续学习'}
- else {$('emptyTitle').textContent='这组学完啦';$('emptyText').textContent='当前没有待练内容，可以切换分类或稍后再来。';$('switchMode').hidden=false;$('switchMode').textContent='切换到'+(mode==='learn'?'复习':'学习')}
- $('modeHint').textContent=mode==='learn'?'从未学习的词组开始':'到期表达优先，遗忘的更快重测';
+   const labels={learn:['学习完成','当前没有待学习的组，可以去待复习继续巩固。','待复习'],review:['待复习完成','当前没有待复习的组。已熟悉内容可以继续随机抽查。','已熟悉'],mastered:['已熟悉池已清空','还没有完成待复习的组。先去学习或待复习。','学习']};const x=labels[mode];
+   $('emptyTitle').textContent=x[0];$('emptyText').textContent=x[1];$('switchMode').hidden=false;$('switchMode').textContent=x[2];$('modeHint').textContent=mode==='mastered'?'已熟悉内容全部打乱，持续随机抽查':'当前组内随机重复，整组完成后进入下一阶段';
 }
 function renderCard(){
  $('card').style.display='flex';$('empty').classList.remove('show');
  const e=entries[current], s=cardState(current);
  $('cardCategory').textContent=e.category.replace(/^[一二三四五六七八九十]+、/,'').replace(/（.*?）/g,'');
- $('cardCount').textContent=(mode==='learn'?'学习':'复习')+' · '+(sessionSeen.size);
+   const g=groupOf(current), ids=mode==='mastered'?[]:(g?cardsInMode(g,mode):[]), done=ids.filter(i=>cardState(i).goodStreak>=QUALIFY_GOODS).length;
+   $('cardCount').textContent=mode==='mastered'?'已熟悉 · 随机抽查':'第 '+(state.groups.indexOf(g)+1)+' 组 · '+done+'/'+ids.length+' 条';
  $('phrase').textContent=e.cn;$('meaningText').textContent=e.en;
  $('meaning').hidden=!revealed;$('revealBtn').hidden=revealed;$('rateRow').classList.toggle('show',revealed);
- $('promptHint').textContent=mode==='learn'?'先读中文，主动回忆对应的英文表达':'主动回忆英文表达；不要急着揭晓';
- $('cardFoot').textContent=s.stage>=3?'这条已有连续熟悉记录，继续诚实判断':'不确定时，选“没想起来”更有帮助';
- $('modeHint').textContent=mode==='learn'?'先回忆中文释义，再查看答案':'按记忆状态安排的到期表达';
+   $('promptHint').textContent='先读中文，主动回忆对应的英文表达';
+   $('cardFoot').textContent=mode==='mastered'?'已熟悉池不分组；答得不稳会回到原复习组':s.goodStreak+' / '+QUALIFY_GOODS+' 次连续熟悉 · 不确定时请诚实选择';
+   $('modeHint').textContent=mode==='mastered'?'已熟悉内容全部打乱，持续随机抽查':'当前组内随机重复，整组完成后进入下一阶段';
 }
-function switchMode(next){mode=next;sessionSeen.clear();document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.mode===mode));stats();selectNext()}
+  function switchMode(next){mode=next;sessionSeen.clear();sessionCount=0;document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.mode===mode));stats();selectNext()}
 function record(rating){
  if(current===null||!revealed)return;
- const s=cardState(current), t=now(), day=24*60*60*1000;
+   const s=cardState(current), t=now();
  if(state.today!==new Date().toLocaleDateString('sv-SE')){state.today=new Date().toLocaleDateString('sv-SE');state.studied=0;state.lapses=0}
  s.seen=(s.seen||0)+1;state.studied++;
- if(rating==='again'){s.stage=0;s.lapses=(s.lapses||0)+1;s.due=t+60*1000;state.lapses++}
- else if(rating==='hard'){s.stage=Math.max(0,(s.stage||0)-1);s.due=t+10*60*1000}
- else {s.stage=Math.min((s.stage||0)+1,6);const intervals=[1,3,7,15,30,60];s.due=t+intervals[Math.max(0,s.stage-1)]*day;s.mastered=s.stage>=6}
- s.last=t;state.cards[current]=s;save();stats();current=null;selectNext()
+   if(rating==='good'&&s.phase!=='mastered')s.goodStreak=Math.min(QUALIFY_GOODS,s.goodStreak+1);
+   else if(rating!=='good'){s.goodStreak=0;if(rating==='again'){s.lapses=(s.lapses||0)+1;state.lapses++}if(s.phase==='mastered')s.phase='review'}
+   s.last=t;state.cards[current]=s;promoteReadyGroups(mode);save();stats();current=null;selectNext()
 }
 function exportProgress(){const blob=new Blob([JSON.stringify({format:'cet6PhraseMemory',version:1,sourceCount:entries.length,state},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='六级搭配背诵-进度备份.json';a.click();URL.revokeObjectURL(a.href);toast('进度备份已导出')}
-function importProgress(file){const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(data.format!=='cet6PhraseMemory'||!data.state?.cards)throw new Error();state=data.state;save();sessionSeen.clear();stats();selectNext();toast('进度已导入')}catch{toast('文件格式不正确，未导入')}};reader.readAsText(file)}
+  function importProgress(file){const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(data.format!=='cet6PhraseMemory'||!data.state?.cards)throw new Error();state=prepareState(data.state);save();sessionSeen.clear();stats();selectNext();toast('进度已导入')}catch{toast('文件格式不正确，未导入')}};reader.readAsText(file)}
 let toastTimer;function toast(msg){const el=$('toast');el.textContent=msg;el.classList.add('on');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('on'),2100)}
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchMode(t.dataset.mode)));
 $('revealBtn').addEventListener('click',()=>{if(current===null)return;revealed=true;renderCard()});
 document.querySelectorAll('.rate').forEach(b=>b.addEventListener('click',()=>record(b.dataset.rating)));
 $('categorySelect').addEventListener('change',()=>{sessionSeen.clear();stats();selectNext()});
-$('switchMode').addEventListener('click',()=>switchMode(mode==='learn'?'review':'learn'));
+  $('switchMode').addEventListener('click',()=>switchMode(mode==='learn'?'review':mode==='review'?'mastered':'learn'));
 $('exportBtn').addEventListener('click',exportProgress);
 $('importBtn').addEventListener('click',()=>$('importFile').click());
 $('importFile').addEventListener('change',e=>{if(e.target.files[0])importProgress(e.target.files[0]);e.target.value=''});
@@ -537,3 +558,4 @@ setupCategories();stats();switchMode('learn');
 </script>
 </body>
 </html>
+
